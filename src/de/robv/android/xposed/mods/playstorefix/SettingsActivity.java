@@ -1,20 +1,23 @@
 package de.robv.android.xposed.mods.playstorefix;
 
-import android.app.Activity;
+import android.support.v7.app.ActionBarActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
-import android.preference.PreferenceFragment;
+import me.piebridge.android.preference.PreferenceFragment;
 import android.widget.Toast;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends ActionBarActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		setContentView(R.layout.abc_screen);
+		findViewById(R.id.title_container).setVisibility(android.view.View.GONE);
+
         // Display the fragment as the main content.
         if (savedInstanceState == null)
-			getFragmentManager().beginTransaction().replace(android.R.id.content,
+			getSupportFragmentManager().beginTransaction().replace(R.id.action_bar_activity_content,
 	                new PrefsFragment()).commit();
 	}
 
