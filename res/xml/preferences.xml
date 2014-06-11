@@ -10,11 +10,6 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="no_restrictions"
-        android:summary="Nukes a function that checks whether Play Store items are available"
-        android:title="No restrictions patch" />
-    <CheckBoxPreference
-        android:defaultValue="false"
         android:key="debug"
         android:summary="Shows an additional menu item to access Play Store&apos;s debug settings"
         android:title="Enable debug menu" />

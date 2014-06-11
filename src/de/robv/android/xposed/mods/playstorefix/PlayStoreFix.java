@@ -6,7 +6,6 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
-import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XSharedPreferences;
 import de.robv.android.xposed.callbacks.XC_LoadPackage.LoadPackageParam;
 import de.robv.android.xposed.callbacks.XCallback;
@@ -27,7 +26,6 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
 
 		XSharedPreferences prefs = new XSharedPreferences(PACKAGE_NAME);
 		final int density = tryParseInt(prefs.getString("density", "240"));
-		final boolean noRestrictionsPatch = prefs.getBoolean("no_restrictions", false);
 		final boolean enableDebugMenu = prefs.getBoolean("debug", false);
 
 		if (density > 0) {
@@ -40,16 +38,6 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
 		}
 
 		if (lpparam.packageName.equals(GOOGLE_PLAYSTORE)) {
-			if (noRestrictionsPatch) {
-				// http://forum.xda-developers.com/showpost.php?p=29466370&postcount=344
-				findAndHookMethod("com.google.android.finsky.utils.LibraryUtils", lpparam.classLoader,
-						"isAvailable",
-						"com.google.android.finsky.api.model.Document",
-						"com.google.android.finsky.api.model.DfeToc",
-						"com.google.android.finsky.library.Library",
-						XC_MethodReplacement.returnConstant(true));
-			}
-
 			if (enableDebugMenu) {
 				// see also: https://plus.google.com/117221066931981967754/posts/SnU689qHLaV
 				findAndHookMethod("com.google.android.finsky.config.GservicesValue", lpparam.classLoader,
