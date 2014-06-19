@@ -26,7 +26,7 @@
             android:value="54" />
         <meta-data
             android:name="xposeddescription"
-            android:value="Fake the density that is submitted to Google in order to make Play Store show all apps." />
+            android:value="@string/description" />
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Play Store Fixes</string>
+    <string name="description">Fake the density/DPI that is submitted to Google in order to make Play Store show more apps.</string>
     <string name="pref_density_summary">Density to be sent to Google: %s</string>
 </resources>
