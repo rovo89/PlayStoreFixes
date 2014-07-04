@@ -29,6 +29,15 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
 		final boolean enableDebugMenu = prefs.getBoolean("debug", false);
 
 		if (density > 0) {
+			// SECTION TO DETECT LAYOUT AND SEND A NORMAL ONE, OR ORIGINAL ONE.
+			findAndHookMethod(Resources.class, "getConfiguration", new XC_MethodHook(XCallback.PRIORITY_LOWEST) {
+                        	protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                            		Configuration c = (Configuration) param.getResult();
+                            		c.screenLayout = Configuration.SCREENLAYOUT_SIZE_NORMAL&Configuration.SCREENLAYOUT_SIZE_MASK;
+                            		// I use NORMAL because was my previous SIZE in 480 dpi. Has to choose the original one.
+                        	}
+                    	});
+			
 			findAndHookMethod(Display.class, "getMetrics", DisplayMetrics.class, new XC_MethodHook(XCallback.PRIORITY_LOWEST) {
 				protected void afterHookedMethod(MethodHookParam param) throws Throwable {
 					DisplayMetrics metrics = (DisplayMetrics) param.args[0];
@@ -36,6 +45,8 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
 				}
 			});
 		}
+		
+		 
 
 		if (lpparam.packageName.equals(GOOGLE_PLAYSTORE)) {
 			if (enableDebugMenu) {
