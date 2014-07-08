@@ -17,7 +17,7 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="calculateLayout"
-        android:summary="Calculate screen layout"
+        android:summary="@string/calc_layout_summary"
         android:title="Automatic Calculate Screen Layout" />
 
     <ListPreference

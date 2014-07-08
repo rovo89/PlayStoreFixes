@@ -3,6 +3,7 @@ package de.robv.android.xposed.mods.playstorefix;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
@@ -34,6 +35,7 @@ public class SettingsActivity extends Activity {
 			sharedPref.registerOnSharedPreferenceChangeListener(this);
 			onSharedPreferenceChanged(sharedPref, "density");
             onSharedPreferenceChanged(sharedPref, "screenLayout");
+            onSharedPreferenceChanged(sharedPref, "calculateLayout");
         }
 
 		@Override
@@ -54,8 +56,32 @@ public class SettingsActivity extends Activity {
 			}else if(key.equals("screenLayout")){
                 ListPreference pref = (ListPreference) findPreference(key);
                 String value = sharedPreferences.getString(key, "");
-                pref.setSummary(getString(R.string.pref_layout_summary, value));
+                pref.setSummary(getString(R.string.pref_layout_summary,
+                        screenLayoutToString(tryParseInt(value))));
             }
 		}
 	}
+
+    private static String screenLayoutToString(int layout){
+        switch (layout) {
+            case 1:
+                return "SMALL";
+            case 2:
+                return "NORMAL";
+            case 3:
+                return "LARGE";
+            case 4:
+                return "XLARGE";
+            default:
+                return "UNDEFINED";
+        }
+    }
+
+    private static int tryParseInt(String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException nfe) {
+            return 0;
+        }
+    }
 }

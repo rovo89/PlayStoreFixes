@@ -85,7 +85,7 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
 
     private static int originalScreenLayout = 0;
 
-    private static int getOriginalScreenLayout(){
+    protected static int getOriginalScreenLayout(){
         return originalScreenLayout;
     }
 

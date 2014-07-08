@@ -5,4 +5,6 @@
     <string name="pref_density_summary">Density to be sent to Google: %s</string>
     <string name="description_layout">Fake the screen layout that is submitted to Google in order to make Play Store show more apps.</string>
     <string name="pref_layout_summary">Layout to be sent to Google: %s</string>
+    <string name="calc_layout_summary">Screen layout calculated based on xdpi and ydpi</string>
+
 </resources>
