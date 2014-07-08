@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
@@ -32,7 +33,8 @@ public class SettingsActivity extends Activity {
 			SharedPreferences sharedPref = getPreferenceScreen().getSharedPreferences();
 			sharedPref.registerOnSharedPreferenceChangeListener(this);
 			onSharedPreferenceChanged(sharedPref, "density");
-		}
+            onSharedPreferenceChanged(sharedPref, "screenLayout");
+        }
 
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -49,7 +51,11 @@ public class SettingsActivity extends Activity {
 				
 				if (isAdded())
 					pref.setSummary(getString(R.string.pref_density_summary, value));
-			}
+			}else if(key.equals("screenLayout")){
+                ListPreference pref = (ListPreference) findPreference(key);
+                String value = sharedPreferences.getString(key, "");
+                pref.setSummary(getString(R.string.pref_layout_summary, value));
+            }
 		}
 	}
 }

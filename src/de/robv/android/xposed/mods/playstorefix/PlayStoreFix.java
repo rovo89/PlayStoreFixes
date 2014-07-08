@@ -6,6 +6,7 @@ import static de.robv.android.xposed.XposedHelpers.setObjectField;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
@@ -31,22 +32,34 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
         XSharedPreferences prefs = new XSharedPreferences(PACKAGE_NAME);
         final int density = tryParseInt(prefs.getString("density", "240"));
         final boolean enableDebugMenu = prefs.getBoolean("debug", false);
+        final boolean calculateLayout = prefs.getBoolean("calculateLayout", false);
         final int screenLayout = tryParseInt(prefs.getString("screenLayout", "0"));
 
         if (density > 0) {
             findAndHookMethod(Display.class, "getMetrics", DisplayMetrics.class, new XC_MethodHook(XCallback.PRIORITY_LOWEST) {
+
+                @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     DisplayMetrics metrics = (DisplayMetrics) param.args[0];
                     metrics.densityDpi = density;
+                    calculateOriginalScreenLayout(metrics.xdpi, metrics.ydpi);
                 }
             });
         }
 
         if (screenLayout > 0) {
             findAndHookMethod(Resources.class, "getConfiguration", new XC_MethodHook(XCallback.PRIORITY_LOWEST) {
+
+                @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Configuration c = (Configuration) param.getResult();
-                    switch (screenLayout) {
+                    int layout;
+                    if(calculateLayout){
+                        layout = getOriginalScreenLayout();
+                    }else{
+                        layout = screenLayout;
+                    }
+                    switch (layout) {
                         case 1:
                             c.screenLayout = Configuration.SCREENLAYOUT_SIZE_SMALL;
                             break;
@@ -89,6 +102,33 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
             return Integer.parseInt(s);
         } catch (NumberFormatException nfe) {
             return 0;
+        }
+    }
+
+    private static int originalScreenLayout = 0;
+
+    private static int getOriginalScreenLayout(){
+        return originalScreenLayout;
+    }
+
+    private static void calculateOriginalScreenLayout(float xdpi, float ydpi) {
+        /**
+         * xlarge screens are at least 960dp x 720dp
+         * large screens are at least 640dp x 480dp
+         * normal screens are at least 470dp x 320dp
+         * small screens are at least 426dp x 320dp
+         * 442 - 439
+         */
+        if ((xdpi <= 426 || xdpi <= 320) && (ydpi <= 426 || ydpi <= 320)){
+            originalScreenLayout = 1; // SMALL
+        }else if ((xdpi <= 470 || xdpi <= 320) && (ydpi <= 470 || ydpi <= 320)){
+            originalScreenLayout = 2; // NORMAL
+        }else if ((xdpi <= 640 || xdpi <= 480) && (ydpi <= 640 || ydpi <= 480)){
+            originalScreenLayout = 3; // LARGE
+        }else if ((xdpi <= 960 || xdpi <= 720) && (ydpi <= 960 || ydpi <= 720)){
+            originalScreenLayout = 4; // XLARGE
+        }else{
+            originalScreenLayout = 0; // UNDEFINED
         }
     }
 }

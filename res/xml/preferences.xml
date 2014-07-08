@@ -14,10 +14,17 @@
         android:summary="Shows an additional menu item to access Play Store&apos;s debug settings"
         android:title="Enable debug menu" />
 
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="calculateLayout"
+        android:summary="Calculate screen layout"
+        android:title="Automatic Calculate Screen Layout" />
+
     <ListPreference
+        android:defaultValue="2"
         android:key="screenLayout"
         android:title="Fake screen layout"
-        android:summary="@string/description_layout"
+        android:summary="@string/pref_layout_summary"
         android:entries="@array/screenLayout"
         android:entryValues="@array/screenLayoutValue" />
 
