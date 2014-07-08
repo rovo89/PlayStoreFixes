@@ -53,29 +53,7 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
                 @Override
                 protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                     Configuration c = (Configuration) param.getResult();
-                    int layout;
-                    if(calculateLayout){
-                        layout = getOriginalScreenLayout();
-                    }else{
-                        layout = screenLayout;
-                    }
-                    switch (layout) {
-                        case 1:
-                            c.screenLayout = Configuration.SCREENLAYOUT_SIZE_SMALL;
-                            break;
-                        case 2:
-                            c.screenLayout = Configuration.SCREENLAYOUT_SIZE_NORMAL;
-                            break;
-                        case 3:
-                            c.screenLayout = Configuration.SCREENLAYOUT_SIZE_LARGE;
-                            break;
-                        case 4:
-                            c.screenLayout = Configuration.SCREENLAYOUT_SIZE_XLARGE;
-                            break;
-                        default:
-                            c.screenLayout = Configuration.SCREENLAYOUT_SIZE_UNDEFINED;
-                            break;
-                    }
+                    c.screenLayout = (calculateLayout) ? getOriginalScreenLayout() : getScreenLayout(screenLayout);
                     c.screenLayout &= Configuration.SCREENLAYOUT_SIZE_MASK;
                 }
             });
@@ -111,6 +89,21 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
         return originalScreenLayout;
     }
 
+    private static int getScreenLayout(int layout){
+        switch (layout) {
+            case 1:
+                return Configuration.SCREENLAYOUT_SIZE_SMALL;
+            case 2:
+                return Configuration.SCREENLAYOUT_SIZE_NORMAL;
+            case 3:
+                return Configuration.SCREENLAYOUT_SIZE_LARGE;
+            case 4:
+                return Configuration.SCREENLAYOUT_SIZE_XLARGE;
+            default:
+                return Configuration.SCREENLAYOUT_SIZE_UNDEFINED;
+        }
+    }
+
     private static void calculateOriginalScreenLayout(float xdpi, float ydpi) {
         /**
          * xlarge screens are at least 960dp x 720dp
@@ -120,15 +113,15 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
          * 442 - 439
          */
         if ((xdpi <= 426 || xdpi <= 320) && (ydpi <= 426 || ydpi <= 320)){
-            originalScreenLayout = 1; // SMALL
+            originalScreenLayout = Configuration.SCREENLAYOUT_SIZE_SMALL; // SMALL
         }else if ((xdpi <= 470 || xdpi <= 320) && (ydpi <= 470 || ydpi <= 320)){
-            originalScreenLayout = 2; // NORMAL
+            originalScreenLayout =  Configuration.SCREENLAYOUT_SIZE_NORMAL; // NORMAL
         }else if ((xdpi <= 640 || xdpi <= 480) && (ydpi <= 640 || ydpi <= 480)){
-            originalScreenLayout = 3; // LARGE
+            originalScreenLayout =  Configuration.SCREENLAYOUT_SIZE_LARGE; // LARGE
         }else if ((xdpi <= 960 || xdpi <= 720) && (ydpi <= 960 || ydpi <= 720)){
-            originalScreenLayout = 4; // XLARGE
+            originalScreenLayout = Configuration.SCREENLAYOUT_SIZE_XLARGE; // XLARGE
         }else{
-            originalScreenLayout = 0; // UNDEFINED
+            originalScreenLayout = Configuration.SCREENLAYOUT_SIZE_UNDEFINED; // UNDEFINED
         }
     }
 }
