@@ -2,9 +2,24 @@
 <resources>
     <string name="app_name">Play Store Fixes</string>
     <string name="description">Fake the density/DPI that is submitted to Google in order to make Play Store show more apps.</string>
+<!-- PREFERENCE - DENSITY -->
+    <string name="pref_density_key">density</string>
     <string name="pref_density_summary">Density to be sent to Google: %s</string>
-    <string name="description_layout">Fake the screen layout that is submitted to Google in order to make Play Store show more apps.</string>
+    <string name="pref_density_title">Fake density</string>
+
+<!-- PREFERENCE - DEBUG -->
+    <string name="pref_debug_key">debug</string>
+    <string name="pref_debug_summary">Shows an additional menu item to access Play Store\'s debug settings</string>
+    <string name="pref_debug_title">Enable debug menu</string>
+
+<!-- PREFERENCE - AUTO LAYOUT -->
+    <string name="pref_auto_key">autoLayout</string>
+    <string name="pref_auto_summary">Calculate layout with screen size</string>
+    <string name="pref_auto_title">Automatic layout</string>
+
+<!-- PREFERENCE - SELECT LAYOUT -->
+    <string name="pref_layout_key">screenLayout</string>
     <string name="pref_layout_summary">Layout to be sent to Google: %s</string>
-    <string name="calc_layout_summary">Screen layout calculated based on xdpi and ydpi</string>
+    <string name="pref_layout_title">Fake screen layout</string>
 
 </resources>

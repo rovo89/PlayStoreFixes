@@ -3,29 +3,30 @@
 
     <EditTextPreference
         android:defaultValue="240"
-        android:dialogTitle="Fake density"
-        android:key="density"
+        android:dialogTitle="@string/pref_density_title"
+        android:key="@string/pref_density_key"
         android:summary="@string/pref_density_summary"
-        android:title="Fake density" />
+        android:title="@string/pref_density_title" />
 
     <CheckBoxPreference
         android:defaultValue="false"
-        android:key="debug"
-        android:summary="Shows an additional menu item to access Play Store&apos;s debug settings"
-        android:title="Enable debug menu" />
+        android:key="@string/pref_debug_key"
+        android:summary="@string/pref_debug_summary"
+        android:title="@string/pref_debug_title" />
 
     <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="calculateLayout"
-        android:summary="@string/calc_layout_summary"
-        android:title="Automatic Calculate Screen Layout" />
+        android:defaultValue="true"
+        android:key="@string/pref_auto_key"
+        android:summary="@string/pref_auto_summary"
+        android:title="@string/pref_auto_title" />
 
     <ListPreference
         android:defaultValue="2"
-        android:key="screenLayout"
-        android:title="Fake screen layout"
+        android:key="@string/pref_layout_key"
+        android:title="@string/pref_layout_title"
         android:summary="@string/pref_layout_summary"
         android:entries="@array/screenLayout"
-        android:entryValues="@array/screenLayoutValue" />
+        android:entryValues="@array/screenLayoutValue"
+        android:enabled="false" />
 
 </PreferenceScreen>

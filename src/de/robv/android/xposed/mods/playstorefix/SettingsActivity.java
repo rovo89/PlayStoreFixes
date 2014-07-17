@@ -3,7 +3,6 @@ package de.robv.android.xposed.mods.playstorefix;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
@@ -26,21 +25,19 @@ public class SettingsActivity extends Activity {
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 
-			// this is important because although the handler classes that read these settings
-			// are in the same package, they are executed in the context of the hooked package
 			getPreferenceManager().setSharedPreferencesMode(MODE_WORLD_READABLE);
 			addPreferencesFromResource(R.xml.preferences);
 			
 			SharedPreferences sharedPref = getPreferenceScreen().getSharedPreferences();
 			sharedPref.registerOnSharedPreferenceChangeListener(this);
-			onSharedPreferenceChanged(sharedPref, "density");
-            onSharedPreferenceChanged(sharedPref, "screenLayout");
-            onSharedPreferenceChanged(sharedPref, "calculateLayout");
+			onSharedPreferenceChanged(sharedPref, getString(R.string.pref_density_key));
+            onSharedPreferenceChanged(sharedPref, getString(R.string.pref_layout_key));
+            onSharedPreferenceChanged(sharedPref, getString(R.string.pref_auto_key));
         }
 
 		@Override
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-			if (key.equals("density")) {
+			if (key.equals(getString(R.string.pref_density_key))) {
 				EditTextPreference pref = (EditTextPreference) findPreference(key);
 				String value = sharedPreferences.getString(key, "");
 				if (value.isEmpty()) {
@@ -53,35 +50,16 @@ public class SettingsActivity extends Activity {
 				
 				if (isAdded())
 					pref.setSummary(getString(R.string.pref_density_summary, value));
-			}else if(key.equals("screenLayout")){
+			}else if(key.equals(getString(R.string.pref_layout_key))){
                 ListPreference pref = (ListPreference) findPreference(key);
                 String value = sharedPreferences.getString(key, "");
                 pref.setSummary(getString(R.string.pref_layout_summary,
-                        screenLayoutToString(tryParseInt(value))));
+                        CalculateLayout.toString(value)));
+            }else if(key.equals(getString(R.string.pref_auto_key))){
+                ListPreference pref = (ListPreference) findPreference(getString(R.string.pref_layout_key));
+                pref.setEnabled(!sharedPreferences.getBoolean(key, false));
             }
 		}
 	}
 
-    private static String screenLayoutToString(int layout){
-        switch (layout) {
-            case 1:
-                return "SMALL";
-            case 2:
-                return "NORMAL";
-            case 3:
-                return "LARGE";
-            case 4:
-                return "XLARGE";
-            default:
-                return "UNDEFINED";
-        }
-    }
-
-    private static int tryParseInt(String s) {
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException nfe) {
-            return 0;
-        }
-    }
 }
