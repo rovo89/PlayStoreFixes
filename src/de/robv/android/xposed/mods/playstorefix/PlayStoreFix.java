@@ -30,7 +30,7 @@ public class PlayStoreFix implements IXposedHookLoadPackage {
 
         XSharedPreferences prefs = new XSharedPreferences(PACKAGE_NAME);
         final int density = Util.tryParseInt(prefs.getString("density", "240"));
-        final boolean enableDebugMenu = prefs.getBoolean("debug", false);
+        final boolean enableDebugMenu = false; // prefs.getBoolean("debug", false);
         final boolean calculateLayout = prefs.getBoolean("calculateLayout", false);
         final int screenLayout = Util.tryParseInt(prefs.getString("screenLayout", "0"));
         final CalculateLayout layout = new CalculateLayout();

@@ -10,6 +10,7 @@
 
     <CheckBoxPreference
         android:defaultValue="false"
+        android:enabled="false"
         android:key="@string/pref_debug_key"
         android:summary="@string/pref_debug_summary"
         android:title="@string/pref_debug_title" />
@@ -22,11 +23,11 @@
 
     <ListPreference
         android:defaultValue="2"
-        android:key="@string/pref_layout_key"
-        android:title="@string/pref_layout_title"
-        android:summary="@string/pref_layout_summary"
+        android:enabled="false"
         android:entries="@array/screenLayout"
         android:entryValues="@array/screenLayoutValue"
-        android:enabled="false" />
+        android:key="@string/pref_layout_key"
+        android:summary="@string/pref_layout_summary"
+        android:title="@string/pref_layout_title" />
 
 </PreferenceScreen>
